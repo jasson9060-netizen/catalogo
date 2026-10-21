@@ -14,25 +14,26 @@
             background: radial-gradient(circle at center, #3a3d40 0%, #181a1b 70%, #0d0e0f 100%) !important;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             overflow: hidden;
             font-family: Arial, sans-serif;
             user-select: none;
             -webkit-user-select: none;
             -ms-user-select: none;
+            box-sizing: border-box;
+            padding-top: 4px !important;
+            padding-bottom: 4px !important;
         }
 
         /* Contenedor optimizado para el logo */
         #logo-container {
             width: 100%;
             max-width: 280px;
-            height: 85px;
+            height: 75px;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 5px;
-            margin-bottom: 5px;
             filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.5));
         }
 
@@ -46,11 +47,11 @@
         #hint {
             color: #d1d5db;
             font-size: 12px;
-            margin-bottom: 4px;
             letter-spacing: 0.5px;
             pointer-events: none;
             text-align: center;
             text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            margin-top: -2px;
         }
 
         /* Indicador de página actual en vivo */
@@ -58,22 +59,20 @@
             color: #fff;
             font-size: 12px;
             font-weight: bold;
-            margin-bottom: 4px;
             letter-spacing: 1px;
             pointer-events: none;
             text-align: center;
             background: rgba(0, 0, 0, 0.6);
-            padding: 3px 12px;
+            padding: 2px 12px;
             border-radius: 15px;
             border: 1px solid rgba(255, 255, 255, 0.15);
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            margin-bottom: 2px;
         }
 
         #watermark-footer {
             color: #9ca3af;
             font-size: 11px;
-            margin-top: 6px;
-            margin-bottom: 2px;
             letter-spacing: 1px;
             pointer-events: none;
             text-align: center;
@@ -87,13 +86,15 @@
             align-items: center;
             justify-content: center;
             filter: drop-shadow(0 15px 25px rgba(0,0,0,0.6));
+            width: 96vw;
+            height: 78vh;
+            max-width: 1150px;
+            max-height: 800px;
         }
 
         #book {
-            width: 90vw;
-            height: 65vh;
-            max-width: 1000px;
-            max-height: 600px;
+            width: 100%;
+            height: 100%;
         }
         
         .page {
@@ -128,11 +129,11 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            font-size: 22px;
-            padding: 14px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            font-size: 24px;
+            padding: 16px 14px;
             cursor: pointer;
             z-index: 100;
             border-radius: 8px;
@@ -147,8 +148,8 @@
             transform: translateY(-50%) scale(1.08);
         }
 
-        #prev-btn { left: -50px; }
-        #next-btn { right: -50px; }
+        #prev-btn { left: -55px; }
+        #next-btn { right: -55px; }
 
         /* Botón flotante de WhatsApp */
         #whatsapp-btn {
@@ -187,7 +188,6 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 4px;
         }
 
         #restart-btn {
@@ -211,7 +211,8 @@
         @media (max-width: 768px) {
             #prev-btn { left: 5px; }
             #next-btn { right: 5px; }
-            #logo-container { max-width: 220px; height: 70px; }
+            #logo-container { max-width: 200px; height: 60px; }
+            #book-container { width: 98vw; height: 75vh; }
             #hint { font-size: 10px; }
             #watermark-footer { font-size: 9px; }
             #page-indicator { font-size: 10px; }
@@ -298,13 +299,13 @@
         window.addEventListener('load', function() {
             const bookElement = document.getElementById("book");
             const pageFlip = new St.PageFlip(bookElement, {
-                width: 500,
-                height: 700,
+                width: 550,
+                height: 780,
                 size: "stretch",
-                minWidth: 300,
-                maxWidth: 1000,
-                minHeight: 400,
-                maxHeight: 1000,
+                minWidth: 320,
+                maxWidth: 1150,
+                minHeight: 450,
+                maxHeight: 1100,
                 maxShadowOpacity: 0.5,
                 showCover: true,
                 mobileScrollSupport: true
