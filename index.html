@@ -40,12 +40,11 @@
         document.addEventListener("DOMContentLoaded", function () {
             const bookElement = document.getElementById("book");
             
-            // Generar las 42 páginas automáticamente con el prefijo exacto de tus archivos
             const totalPages = 42;
-            const prefix = "Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-";
+            // Nombre base con los caracteres codificados para la web (espacios y paréntesis)
+            const prefix = "Presentación%20Portfolio%20Creativo%20Agencia%20de%20Publicidad%20Marketing%20Minimalista%20Rosa%20Rojo%20(1)_pages-to-jpg-";
             
             for (let i = 1; i <= totalPages; i++) {
-                // Formatear el número con ceros a la izquierda (0001, 0002, ..., 0042)
                 let numStr = String(i).padStart(4, '0');
                 let filename = prefix + numStr + ".jpg";
                 
@@ -55,7 +54,6 @@
                 bookElement.appendChild(pageDiv);
             }
 
-            // Inicializar el efecto de libro 3D
             const pageFlip = new St.PageFlip(bookElement, {
                 width: 500,
                 height: 700,
