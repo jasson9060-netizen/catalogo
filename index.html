@@ -17,10 +17,9 @@
             align-items: center;
             overflow: hidden;
             font-family: Arial, sans-serif;
-            user-select: none; /* Evita selección de texto */
+            user-select: none;
         }
         
-        /* Mensaje indicador superior */
         #hint {
             color: #aaa;
             font-size: 13px;
@@ -30,7 +29,6 @@
             text-align: center;
         }
 
-        /* Leyenda de derechos Studio Vivencia */
         #watermark-footer {
             color: #777;
             font-size: 12px;
@@ -71,7 +69,6 @@
             pointer-events: none;
         }
 
-        /* Capa invisible para bloquear clic derecho y descargas */
         .page::after {
             content: "";
             position: absolute;
@@ -106,99 +103,40 @@
         #prev-btn { left: -50px; }
         #next-btn { right: -50px; }
 
+        /* Botón flotante de WhatsApp */
+        #whatsapp-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background-color: #25d366;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+            z-index: 1000;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        #whatsapp-btn:hover {
+            background-color: #20ba5a;
+            transform: scale(1.05);
+        }
+
+        #whatsapp-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
         @media (max-width: 768px) {
             #prev-btn { left: 5px; }
             #next-btn { right: 5px; }
             #hint { font-size: 11px; }
             #watermark-footer { font-size: 10px; }
-        }
-    </style>
-</head>
-<body oncontextmenu="return false;"> <!-- Bloquea clic derecho en toda la página -->
-
-    <div id="hint">📖 Da clic en las flechas o arrastra las esquinas para hojear</div>
-
-    <div id="book-container">
-        <button class="nav-btn" id="prev-btn">&#10094;</button>
-        
-        <div id="book">
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0001.jpg" alt="Página 1"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0002.jpg" alt="Página 2"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0003.jpg" alt="Página 3"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0004.jpg" alt="Página 4"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0005.jpg" alt="Página 5"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0006.jpg" alt="Página 6"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0007.jpg" alt="Página 7"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0008.jpg" alt="Página 8"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0009.jpg" alt="Página 9"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0010.jpg" alt="Página 10"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0011.jpg" alt="Página 11"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0012.jpg" alt="Página 12"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0013.jpg" alt="Página 13"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0014.jpg" alt="Página 14"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0015.jpg" alt="Página 15"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0016.jpg" alt="Página 16"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0017.jpg" alt="Página 17"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0018.jpg" alt="Página 18"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0019.jpg" alt="Página 19"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0020.jpg" alt="Página 20"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0021.jpg" alt="Página 21"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0022.jpg" alt="Página 22"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0023.jpg" alt="Página 23"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0024.jpg" alt="Página 24"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0025.jpg" alt="Página 25"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0026.jpg" alt="Página 26"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0027.jpg" alt="Página 27"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0028.jpg" alt="Página 28"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0029.jpg" alt="Página 29"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0030.jpg" alt="Página 30"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0031.jpg" alt="Página 31"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0032.jpg" alt="Página 32"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0033.jpg" alt="Página 33"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0034.jpg" alt="Página 34"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0035.jpg" alt="Página 35"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0036.jpg" alt="Página 36"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0037.jpg" alt="Página 37"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0038.jpg" alt="Página 38"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0039.jpg" alt="Página 39"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0040.jpg" alt="Página 40"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0041.jpg" alt="Página 41"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0042.jpg" alt="Página 42"></div>
-        </div>
-
-        <button class="nav-btn" id="next-btn">&#10095;</button>
-    </div>
-
-    <div id="watermark-footer">Prohibida su reproducción o copia — Prop. Studio Vivencia</div>
-
-    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
-    <script>
-        window.addEventListener('load', function() {
-            const bookElement = document.getElementById("book");
-            const pageFlip = new St.PageFlip(bookElement, {
-                width: 500,
-                height: 700,
-                size: "stretch",
-                minWidth: 300,
-                maxWidth: 1000,
-                minHeight: 400,
-                maxHeight: 1000,
-                maxShadowOpacity: 0.5,
-                showCover: true,
-                mobileScrollSupport: true
-            });
-            
-            pageFlip.loadFromHTML(document.querySelectorAll(".page"));
-
-            // Control de flechas laterales
-            document.getElementById("prev-btn").addEventListener("click", () => {
-                pageFlip.flipPrev();
-            });
-
-            document.getElementById("next-btn").addEventListener("click", () => {
-                pageFlip.flipNext();
-            });
-        });
-    </script>
-</body>
-</html>
+            #whatsapp-btn { bottom: 15px; right: 15px; padding: 10px
