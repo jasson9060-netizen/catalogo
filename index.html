@@ -19,10 +19,21 @@
             font-family: Arial, sans-serif;
             user-select: none;
         }
+
+        /* Título de Bienvenida */
+        #main-title {
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 2px;
+            letter-spacing: 1px;
+            text-align: center;
+            text-transform: uppercase;
+        }
         
         #hint {
             color: #aaa;
-            font-size: 13px;
+            font-size: 12px;
             margin-bottom: 4px;
             letter-spacing: 0.5px;
             pointer-events: none;
@@ -32,7 +43,7 @@
         /* Indicador de página actual en vivo */
         #page-indicator {
             color: #fff;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             margin-bottom: 4px;
             letter-spacing: 1px;
@@ -46,8 +57,8 @@
         #watermark-footer {
             color: #888;
             font-size: 11px;
-            margin-top: 6px;
-            margin-bottom: 4px;
+            margin-top: 4px;
+            margin-bottom: 2px;
             letter-spacing: 1px;
             pointer-events: none;
             text-align: center;
@@ -63,9 +74,9 @@
 
         #book {
             width: 90vw;
-            height: 74vh;
+            height: 72vh;
             max-width: 1000px;
-            max-height: 680px;
+            max-height: 660px;
         }
         
         .page {
@@ -118,7 +129,7 @@
         #prev-btn { left: -50px; }
         #next-btn { right: -50px; }
 
-        /* Botón flotante de WhatsApp (inicialmente oculto en portada) */
+        /* Botón flotante de WhatsApp */
         #whatsapp-btn {
             position: fixed;
             bottom: 25px;
@@ -127,7 +138,7 @@
             color: white;
             padding: 12px 20px;
             border-radius: 50px;
-            display: none; /* Oculto por defecto */
+            display: none;
             align-items: center;
             gap: 10px;
             text-decoration: none;
@@ -149,24 +160,27 @@
             fill: white;
         }
 
-        /* Botón especial de fin de catálogo para regresar al inicio */
+        /* Contenedor fijo para el botón de reinicio (evita que la pantalla brinque) */
         #restart-container {
-            display: none;
-            text-align: center;
-            margin-top: 4px;
+            height: 28px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 2px;
         }
 
         #restart-btn {
             background-color: #ff4757;
             color: white;
             border: none;
-            padding: 6px 16px;
+            padding: 5px 14px;
             border-radius: 20px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
             transition: background 0.2s;
+            display: none; /* Oculto por defecto */
         }
 
         #restart-btn:hover {
@@ -176,15 +190,17 @@
         @media (max-width: 768px) {
             #prev-btn { left: 5px; }
             #next-btn { right: 5px; }
-            #hint { font-size: 11px; }
-            #watermark-footer { font-size: 10px; }
-            #page-indicator { font-size: 11px; }
+            #main-title { font-size: 14px; }
+            #hint { font-size: 10px; }
+            #watermark-footer { font-size: 9px; }
+            #page-indicator { font-size: 10px; }
             #whatsapp-btn { bottom: 15px; right: 15px; padding: 10px 16px; font-size: 13px; }
         }
     </style>
 </head>
 <body oncontextmenu="return false;">
 
+    <div id="main-title">✨ Studio Vivencia — Catálogo Digital ✨</div>
     <div id="hint">📖 Da clic en las flechas o arrastra las esquinas para hojear</div>
     <div id="page-indicator">Página 1 de 42</div>
 
@@ -239,12 +255,12 @@
         <button class="nav-btn" id="next-btn">&#10095;</button>
     </div>
 
-    <div id="watermark-footer">Prohibida su reproducción o copia — Prop. Studio Vivencia</div>
-    
-    <!-- Botón especial de retorno al inicio (aparece solo al final) -->
+    <!-- Espacio fijo para el botón de reinicio (evita brincos en la pantalla) -->
     <div id="restart-container">
         <button id="restart-btn">🔄 Volver a la página 1</button>
     </div>
+
+    <div id="watermark-footer">Prohibida su reproducción o copia — Prop. Studio Vivencia</div>
 
     <!-- Botón flotante de WhatsApp -->
     <a id="whatsapp-btn" href="#" target="_blank">
@@ -278,26 +294,33 @@
                 // Actualizar texto del número de página
                 document.getElementById("page-indicator").innerText = `Página ${realPageNum} de ${totalPages}`;
 
-                // Configurar enlace de WhatsApp
+                // Configurar enlace y mensaje de WhatsApp
                 const phoneNumber = "525514998843";
-                const message = `Hola Studio Vivencia, estoy viendo su catálogo digital y me interesa el modelo de la página ${realPageNum}.`;
+                let message = "";
+
+                if (realPageNum === 41) {
+                    message = `Hola Studio Vivencia, estoy viendo la página 41 de credenciales y me gustaría saber qué color de cordón hay disponible para mi pedido.`;
+                } else {
+                    message = `Hola Studio Vivencia, estoy viendo su catálogo digital y me interesa el modelo de la página ${realPageNum}.`;
+                }
+
                 const encodedMessage = encodeURIComponent(message);
                 const waBtn = document.getElementById("whatsapp-btn");
                 waBtn.href = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
-                // Mostrar botón de WhatsApp solo a partir de la página 3 (índice 2)
-                if (pageIndex >= 2) {
+                // Mostrar botón de WhatsApp solo desde la página 3 hasta la 41
+                if (pageIndex >= 2 && realPageNum < totalPages) {
                     waBtn.style.display = "flex";
                 } else {
                     waBtn.style.display = "none";
                 }
 
-                // Mostrar botón de reinicio al llegar a la última página (42 -> índice 41 o total-1)
-                const restartContainer = document.getElementById("restart-container");
+                // Controlar el botón de reinicio en la página 42 sin mover la estructura
+                const restartBtn = document.getElementById("restart-btn");
                 if (realPageNum === totalPages) {
-                    restartContainer.style.display = "block";
+                    restartBtn.style.display = "inline-block";
                 } else {
-                    restartContainer.style.display = "none";
+                    restartBtn.style.display = "none";
                 }
             }
 
