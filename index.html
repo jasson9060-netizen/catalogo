@@ -18,17 +18,16 @@
             overflow: hidden;
             font-family: Arial, sans-serif;
             user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
         }
 
-        /* Título de Bienvenida */
-        #main-title {
-            color: #fff;
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 2px;
-            letter-spacing: 1px;
-            text-align: center;
-            text-transform: uppercase;
+        /* Estilo para el Logo en la parte superior */
+        #header-logo {
+            max-height: 60px;
+            width: auto;
+            margin-bottom: 6px;
+            pointer-events: none;
         }
         
         #hint {
@@ -74,9 +73,9 @@
 
         #book {
             width: 90vw;
-            height: 72vh;
+            height: 70vh;
             max-width: 1000px;
-            max-height: 660px;
+            max-height: 650px;
         }
         
         .page {
@@ -95,6 +94,7 @@
             pointer-events: none;
         }
 
+        /* Capa transparente anti-guardado de imágenes */
         .page::after {
             content: "";
             position: absolute;
@@ -160,7 +160,7 @@
             fill: white;
         }
 
-        /* Contenedor fijo para el botón de reinicio (evita que la pantalla brinque) */
+        /* Contenedor fijo para el botón de reinicio */
         #restart-container {
             height: 28px;
             display: flex;
@@ -180,7 +180,7 @@
             cursor: pointer;
             box-shadow: 0 2px 5px rgba(0,0,0,0.3);
             transition: background 0.2s;
-            display: none; /* Oculto por defecto */
+            display: none;
         }
 
         #restart-btn:hover {
@@ -190,7 +190,7 @@
         @media (max-width: 768px) {
             #prev-btn { left: 5px; }
             #next-btn { right: 5px; }
-            #main-title { font-size: 14px; }
+            #header-logo { max-height: 45px; }
             #hint { font-size: 10px; }
             #watermark-footer { font-size: 9px; }
             #page-indicator { font-size: 10px; }
@@ -200,7 +200,8 @@
 </head>
 <body oncontextmenu="return false;">
 
-    <div id="main-title">✨ Studio Vivencia — Catálogo Digital ✨</div>
+    <!-- Tu logotipo arriba solo -->
+    <img id="header-logo" src="logo.png" alt="Studio Vivencia Logo">
     <div id="hint">📖 Da clic en las flechas o arrastra las esquinas para hojear</div>
     <div id="page-indicator">Página 1 de 42</div>
 
@@ -255,7 +256,7 @@
         <button class="nav-btn" id="next-btn">&#10095;</button>
     </div>
 
-    <!-- Espacio fijo para el botón de reinicio (evita brincos en la pantalla) -->
+    <!-- Espacio fijo para el botón de reinicio -->
     <div id="restart-container">
         <button id="restart-btn">🔄 Volver a la página 1</button>
     </div>
@@ -315,7 +316,7 @@
                     waBtn.style.display = "none";
                 }
 
-                // Controlar el botón de reinicio en la página 42 sin mover la estructura
+                // Controlar el botón de reinicio en la página 42
                 const restartBtn = document.getElementById("restart-btn");
                 if (realPageNum === totalPages) {
                     restartBtn.style.display = "inline-block";
@@ -341,9 +342,9 @@
                 pageFlip.flipNext();
             });
 
-            // Botón para volver al inicio
+            // Botón para volver al inicio (función turnToPage)
             document.getElementById("restart-btn").addEventListener("click", () => {
-                pageFlip.turnTo(0);
+                pageFlip.turnToPage(0);
             });
         });
     </script>
