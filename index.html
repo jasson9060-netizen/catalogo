@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo Digital - Studio Vivencia</title>
+    <!-- Librería PageFlip para el efecto de libro -->
+    <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
     <style>
         body, html {
             margin: 0 !important;
@@ -24,6 +26,90 @@
             box-sizing: border-box;
             padding-top: 4px !important;
             padding-bottom: 4px !important;
+        }
+
+        /* --- PANTALLA DE CONTRASEÑA (MODAL LOCK) --- */
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(13, 14, 15, 0.95);
+            backdrop-filter: blur(8px);
+            z-index: 10000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: #1e293b;
+            border: 1px solid #38bdf8;
+            padding: 25px 30px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            max-width: 320px;
+            width: 90%;
+            color: #fff;
+        }
+
+        .login-box h3 {
+            margin-top: 0;
+            color: #38bdf8;
+            font-size: 18px;
+            letter-spacing: 0.5px;
+        }
+
+        .login-box p {
+            font-size: 13px;
+            color: #cbd5e1;
+            margin-bottom: 15px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #475569;
+            background: #0f172a;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+            box-sizing: border-box;
+            outline: none;
+            margin-bottom: 12px;
+        }
+
+        .login-box input:focus {
+            border-color: #38bdf8;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: #38bdf8;
+            color: #0f172a;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .login-box button:hover {
+            background: #0284c7;
+            color: #fff;
+        }
+
+        #error-msg {
+            color: #ef4444;
+            font-size: 12px;
+            margin-top: 8px;
+            display: none;
+            font-weight: bold;
         }
 
         /* Contenedor optimizado para el logo */
@@ -148,161 +234,179 @@
             transform: translateY(-50%) scale(1.08);
         }
 
-        #prev-btn { left: -55px; }
-        #next-btn { right: -55px; }
+        #prev-btn { left: 10px; }
+        #next-btn { right: 10px; }
 
-        /* Botón flotante de WhatsApp */
+        /* Botón Flotante de WhatsApp */
         #whatsapp-btn {
             position: fixed;
-            bottom: 25px;
-            right: 25px;
-            background: linear-gradient(135deg, #25d366, #128c7e);
-            color: white;
-            padding: 12px 22px;
+            bottom: 20px;
+            right: 20px;
+            background-color: #25d366;
+            color: #fff;
             border-radius: 50px;
-            display: none;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
+            padding: 10px 18px;
+            font-size: 13px;
             font-weight: bold;
-            font-size: 14px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.5);
-            z-index: 1000;
-            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            display: none; /* Se activa mediante JS */
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            transition: transform 0.2s ease, background-color 0.2s ease;
         }
 
         #whatsapp-btn:hover {
-            transform: scale(1.06);
-            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
-        }
-
-        #whatsapp-btn svg {
-            width: 24px;
-            height: 24px;
-            fill: white;
-        }
-
-        /* Contenedor fijo para el botón de reinicio */
-        #restart-container {
-            height: 28px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #restart-btn {
-            background: linear-gradient(135deg, #ff4757, #ff6b81);
-            color: white;
-            border: none;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(255, 71, 87, 0.4);
-            transition: transform 0.2s;
-            display: none;
-        }
-
-        #restart-btn:hover {
+            background-color: #128c7e;
             transform: scale(1.05);
         }
 
-        @media (max-width: 768px) {
-            #prev-btn { left: 5px; }
-            #next-btn { right: 5px; }
-            #logo-container { max-width: 200px; height: 60px; }
-            #book-container { width: 98vw; height: 75vh; }
-            #hint { font-size: 10px; }
-            #watermark-footer { font-size: 9px; }
-            #page-indicator { font-size: 10px; }
-            #whatsapp-btn { bottom: 15px; right: 15px; padding: 10px 16px; font-size: 13px; }
+        /* Botón de Reinicio en Última Página */
+        #restart-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background-color: #38bdf8;
+            color: #0f172a;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            display: none;
+            z-index: 999;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        @media (max-width: 600px) {
+            .nav-btn { padding: 10px 8px; font-size: 18px; }
+            #logo-container { height: 50px; }
         }
     </style>
 </head>
-<body oncontextmenu="return false;">
+<body>
 
-    <!-- Logotipo en la parte superior -->
-    <div id="logo-container">
-        <img id="header-logo" src="logo.png" alt="Studio Vivencia Logo">
+    <!-- OVERLAY DE BLOQUEO POR CONTRASEÑA -->
+    <div id="login-overlay">
+        <div class="login-box">
+            <h3>🔒 Acceso Privado</h3>
+            <p>Ingresa la contraseña proporcionada por <strong>Studio Vivencia</strong> para ver el catálogo:</p>
+            <input type="password" id="passInput" placeholder="Contraseña..." onkeypress="checkEnter(event)">
+            <button onclick="validarPassword()">ENTRAR AL CATÁLOGO</button>
+            <div id="error-msg">⚠️ Contraseña incorrecta</div>
+        </div>
     </div>
-    <div id="hint">📖 Da clic en las flechas o arrastra las esquinas para hojear</div>
+
+    <!-- Encabezado con Logo -->
+    <div id="logo-container">
+        <img id="header-logo" src="logo.png" alt="Studio Vivencia Logo" onerror="this.style.display='none'">
+    </div>
+
+    <div id="hint">📖 Desliza o usa las flechas para hojear las muestras</div>
+
+    <!-- Contenedor del Libro -->
+    <div id="book-container">
+        <button id="prev-btn" class="nav-btn">❮</button>
+        <div id="book">
+            <!-- 43 Páginas cargadas estáticamente -->
+            <div class="page"><img src="paginas/1.jpg" alt="Página 1"></div>
+            <div class="page"><img src="paginas/2.jpg" alt="Página 2"></div>
+            <div class="page"><img src="paginas/3.jpg" alt="Página 3"></div>
+            <div class="page"><img src="paginas/4.jpg" alt="Página 4"></div>
+            <div class="page"><img src="paginas/5.jpg" alt="Página 5"></div>
+            <div class="page"><img src="paginas/6.jpg" alt="Página 6"></div>
+            <div class="page"><img src="paginas/7.jpg" alt="Página 7"></div>
+            <div class="page"><img src="paginas/8.jpg" alt="Página 8"></div>
+            <div class="page"><img src="paginas/9.jpg" alt="Página 9"></div>
+            <div class="page"><img src="paginas/10.jpg" alt="Página 10"></div>
+            <div class="page"><img src="paginas/11.jpg" alt="Página 11"></div>
+            <div class="page"><img src="paginas/12.jpg" alt="Página 12"></div>
+            <div class="page"><img src="paginas/13.jpg" alt="Página 13"></div>
+            <div class="page"><img src="paginas/14.jpg" alt="Página 14"></div>
+            <div class="page"><img src="paginas/15.jpg" alt="Página 15"></div>
+            <div class="page"><img src="paginas/16.jpg" alt="Página 16"></div>
+            <div class="page"><img src="paginas/17.jpg" alt="Página 17"></div>
+            <div class="page"><img src="paginas/18.jpg" alt="Página 18"></div>
+            <div class="page"><img src="paginas/19.jpg" alt="Página 19"></div>
+            <div class="page"><img src="paginas/20.jpg" alt="Página 20"></div>
+            <div class="page"><img src="paginas/21.jpg" alt="Página 21"></div>
+            <div class="page"><img src="paginas/22.jpg" alt="Página 22"></div>
+            <div class="page"><img src="paginas/23.jpg" alt="Página 23"></div>
+            <div class="page"><img src="paginas/24.jpg" alt="Página 24"></div>
+            <div class="page"><img src="paginas/25.jpg" alt="Página 25"></div>
+            <div class="page"><img src="paginas/26.jpg" alt="Página 26"></div>
+            <div class="page"><img src="paginas/27.jpg" alt="Página 27"></div>
+            <div class="page"><img src="paginas/28.jpg" alt="Página 28"></div>
+            <div class="page"><img src="paginas/29.jpg" alt="Página 29"></div>
+            <div class="page"><img src="paginas/30.jpg" alt="Página 30"></div>
+            <div class="page"><img src="paginas/31.jpg" alt="Página 31"></div>
+            <div class="page"><img src="paginas/32.jpg" alt="Página 32"></div>
+            <div class="page"><img src="paginas/33.jpg" alt="Página 33"></div>
+            <div class="page"><img src="paginas/34.jpg" alt="Página 34"></div>
+            <div class="page"><img src="paginas/35.jpg" alt="Página 35"></div>
+            <div class="page"><img src="paginas/36.jpg" alt="Página 36"></div>
+            <div class="page"><img src="paginas/37.jpg" alt="Página 37"></div>
+            <div class="page"><img src="paginas/38.jpg" alt="Página 38"></div>
+            <div class="page"><img src="paginas/39.jpg" alt="Página 39"></div>
+            <div class="page"><img src="paginas/40.jpg" alt="Página 40"></div>
+            <div class="page"><img src="paginas/41.jpg" alt="Página 41"></div>
+            <div class="page"><img src="paginas/42.jpg" alt="Página 42"></div>
+            <div class="page"><img src="paginas/43.jpg" alt="Página 43"></div>
+        </div>
+        <button id="next-btn" class="nav-btn">❯</button>
+    </div>
+
+    <!-- Indicador de Página -->
     <div id="page-indicator">Página 1 de 43</div>
 
-    <div id="book-container">
-        <button class="nav-btn" id="prev-btn">&#10094;</button>
-        
-        <div id="book">
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0001.jpg" alt="Página 1"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0002.jpg" alt="Página 2"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo(1)_pages-to-jpg-2Q.jpg" alt="Página 3"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0003.jpg" alt="Página 4"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0004.jpg" alt="Página 5"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0005.jpg" alt="Página 6"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0006.jpg" alt="Página 7"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0007.jpg" alt="Página 8"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0008.jpg" alt="Página 9"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0009.jpg" alt="Página 10"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0010.jpg" alt="Página 11"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0011.jpg" alt="Página 12"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0012.jpg" alt="Página 13"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0013.jpg" alt="Página 14"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0014.jpg" alt="Página 15"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0015.jpg" alt="Página 16"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0016.jpg" alt="Página 17"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0017.jpg" alt="Página 18"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0018.jpg" alt="Página 19"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0019.jpg" alt="Página 20"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0020.jpg" alt="Página 21"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0021.jpg" alt="Página 22"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0022.jpg" alt="Página 23"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0023.jpg" alt="Página 24"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0024.jpg" alt="Página 25"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0025.jpg" alt="Página 26"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0026.jpg" alt="Página 27"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0027.jpg" alt="Página 28"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0028.jpg" alt="Página 29"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0029.jpg" alt="Página 30"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0030.jpg" alt="Página 31"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0031.jpg" alt="Página 32"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0032.jpg" alt="Página 33"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0033.jpg" alt="Página 34"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0034.jpg" alt="Página 35"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0035.jpg" alt="Página 36"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0036.jpg" alt="Página 37"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0037.jpg" alt="Página 38"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0038.jpg" alt="Página 39"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0039.jpg" alt="Página 40"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0040.jpg" alt="Página 41"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0041.jpg" alt="Página 42"></div>
-            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0042.jpg" alt="Página 43"></div>
-        </div>
+    <!-- Pie de página -->
+    <div id="watermark-footer">Studio Vivencia • Muestras de Fotografía</div>
 
-        <button class="nav-btn" id="next-btn">&#10095;</button>
-    </div>
-
-    <!-- Espacio fijo para el botón de reinicio -->
-    <div id="restart-container">
-        <button id="restart-btn">🔄 Volver a la página 1</button>
-    </div>
-
-    <div id="watermark-footer">Prohibida su reproducción o copia — Prop. Studio Vivencia</div>
-
-    <!-- Botón flotante de WhatsApp -->
+    <!-- Botón de WhatsApp Directo -->
     <a id="whatsapp-btn" href="#" target="_blank">
-        <svg viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/></svg>
-        Pedir este modelo
+        💬 Cotizar este modelo
     </a>
 
-    <script src="https://cdn.jsdelivr.net/npm/page-flip@2.0.7/dist/js/page-flip.browser.js"></script>
+    <!-- Botón para Volver al Inicio -->
+    <button id="restart-btn">🔄 Volver al inicio</button>
+
     <script>
-        window.addEventListener('load', function() {
-            const bookElement = document.getElementById("book");
-            const pageFlip = new St.PageFlip(bookElement, {
+        // --- CONFIGURACIÓN DE CONTRASEÑA ---
+        const CLAVE_CORRECTA = "1234"; // 🔑 Cambia esta contraseña por la que gustes
+        const REQUERIR_PASSWORD = true; // 🔴 Cambia a false cuando quieras QUITAR el bloqueo completamente
+
+        // Verificar bloqueo inicial
+        if (!REQUERIR_PASSWORD) {
+            document.getElementById("login-overlay").style.display = "none";
+        }
+
+        function validarPassword() {
+            const passInput = document.getElementById("passInput").value;
+            const errorMsg = document.getElementById("error-msg");
+
+            if (passInput === CLAVE_CORRECTA) {
+                document.getElementById("login-overlay").style.display = "none";
+            } else {
+                errorMsg.style.display = "block";
+                document.getElementById("passInput").value = "";
+            }
+        }
+
+        function checkEnter(e) {
+            if (e.key === 'Enter') {
+                validarPassword();
+            }
+        }
+
+        // --- INICIALIZACIÓN DEL LIBRO PAGEFLIP ---
+        window.addEventListener('DOMContentLoaded', () => {
+            const pageFlip = new St.PageFlip(document.getElementById("book"), {
                 width: 550,
-                height: 780,
+                height: 750,
                 size: "stretch",
-                minWidth: 320,
+                minWidth: 310,
                 maxWidth: 1150,
                 minHeight: 450,
                 maxHeight: 1100,
@@ -336,14 +440,14 @@
                 const waBtn = document.getElementById("whatsapp-btn");
                 waBtn.href = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
-                // Mostrar botón de WhatsApp desde la página 3 hasta la 42 (se oculta en 1, 2 y 43)
+                // Mostrar botón de WhatsApp desde la página 3 hasta la 42
                 if (pageIndex >= 2 && realPageNum < totalPages) {
                     waBtn.style.display = "flex";
                 } else {
                     waBtn.style.display = "none";
                 }
 
-                // Controlar el botón de reinicio en la página final (43)
+                // Controlar el botón de reinicio en la página final
                 const restartBtn = document.getElementById("restart-btn");
                 if (realPageNum === totalPages) {
                     restartBtn.style.display = "inline-block";
