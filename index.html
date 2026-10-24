@@ -164,7 +164,7 @@
             margin: 0;
         }
 
-        /* Indicador de página actual reubicado hacia arriba para que no lo tape WhatsApp */
+        /* Indicador de página actual arriba para no estorbar con WhatsApp */
         #page-indicator {
             color: #fff;
             font-size: 12px;
@@ -310,7 +310,7 @@
 </head>
 <body>
 
-    <!-- OVERLAY DE BLOQUEO POR CONTRASEÑA -->
+    <!-- OVERLAY DE CONTRASEÑA -->
     <div id="login-overlay">
         <div class="login-box">
             <h3>🔒 Acceso Privado</h3>
@@ -333,10 +333,10 @@
 
     <div id="hint">📖 Desliza o usa las flechas para hojear las muestras</div>
 
-    <!-- Indicador de Página (Movido hacia arriba para evitar conflicto con WhatsApp) -->
+    <!-- Indicador de Página Arriba -->
     <div id="page-indicator">Página 1 de 43</div>
 
-    <!-- Contenedor del Libro (Con la imagen 2Q colocada exactamente en la Página 3) -->
+    <!-- Contenedor del Libro (43 páginas exactas) -->
     <div id="book-container">
         <button id="prev-btn" class="nav-btn">❮</button>
         <div id="book">
@@ -382,6 +382,7 @@
             <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0039.jpg" alt="Página 40"></div>
             <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0040.jpg" alt="Página 41"></div>
             <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0041.jpg" alt="Página 42"></div>
+            <div class="page"><img src="Presentación Portfolio Creativo Agencia de Publicidad Marketing Minimalista Rosa Rojo (1)_pages-to-jpg-0042.jpg" alt="Página 43"></div>
         </div>
         <button id="next-btn" class="nav-btn">❯</button>
     </div>
@@ -394,7 +395,7 @@
         💬 Solicitar este modelo
     </a>
 
-    <!-- Botón para Volver al Inicio -->
+    <!-- Botón para Volver al Inicio (Página 43) -->
     <button id="restart-btn">🔄 Volver al inicio</button>
 
     <script>
@@ -425,18 +426,29 @@
                 document.getElementById("page-indicator").innerText = `Página ${realPageNum} de ${totalPages}`;
 
                 const phoneNumber = "525514998843";
-                let message = `Hola Studio Vivencia, estoy viendo su catálogo digital y me interesa el modelo de la página ${realPageNum}.`;
+                let message = "";
+
+                // Mensajes personalizados según la página exacta
+                if (realPageNum === 3) {
+                    message = `Me interesa la credencial con QR y notificación.`;
+                } else if (realPageNum === 42) {
+                    message = `Hola Studio Vivencia, estoy preguntando qué color de cordón disponible tienen para el modelo que escogí.`;
+                } else {
+                    message = `Hola Studio Vivencia, estoy viendo su catálogo digital y me interesa el modelo de la página ${realPageNum}.`;
+                }
 
                 const encodedMessage = encodeURIComponent(message);
                 const waBtn = document.getElementById("whatsapp-btn");
                 waBtn.href = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
+                // Mostrar botón de WhatsApp de la página 3 a la 42 (Oculto en portadas 1-2 y en la última página 43)
                 if (pageIndex >= 2 && realPageNum < totalPages) {
                     waBtn.style.display = "flex";
                 } else {
                     waBtn.style.display = "none";
                 }
 
+                // Mostrar botón exclusivo de reinicio en la página final (43)
                 const restartBtn = document.getElementById("restart-btn");
                 if (realPageNum === totalPages) {
                     restartBtn.style.display = "inline-block";
