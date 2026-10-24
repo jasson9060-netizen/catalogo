@@ -35,8 +35,8 @@
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(13, 14, 15, 0.95);
-            backdrop-filter: blur(8px);
+            background: rgba(13, 14, 15, 0.96);
+            backdrop-filter: blur(10px);
             z-index: 10000;
             display: flex;
             justify-content: center;
@@ -68,9 +68,16 @@
             margin-bottom: 15px;
         }
 
+        /* Contenedor del input con el ojito dentro */
+        .password-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
         .login-box input {
             width: 100%;
-            padding: 10px;
+            padding: 10px 40px 10px 10px; /* Espacio a la derecha para el botón del ojito */
             border-radius: 6px;
             border: 1px solid #475569;
             background: #0f172a;
@@ -79,14 +86,34 @@
             text-align: center;
             box-sizing: border-box;
             outline: none;
-            margin-bottom: 12px;
         }
 
         .login-box input:focus {
             border-color: #38bdf8;
         }
 
-        .login-box button {
+        /* Estilo del botón del ojito */
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0;
+            color: #94a3b8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toggle-password:hover {
+            color: #38bdf8;
+        }
+
+        .login-box button.btn-entrar {
             width: 100%;
             padding: 12px;
             background: #38bdf8;
@@ -99,7 +126,7 @@
             transition: 0.2s;
         }
 
-        .login-box button:hover {
+        .login-box button.btn-entrar:hover {
             background: #0284c7;
             color: #fff;
         }
@@ -249,7 +276,7 @@
             font-size: 13px;
             font-weight: bold;
             text-decoration: none;
-            display: none; /* Se activa mediante JS */
+            display: none;
             align-items: center;
             gap: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
@@ -293,8 +320,13 @@
         <div class="login-box">
             <h3>🔒 Acceso Privado</h3>
             <p>Ingresa la contraseña proporcionada por <strong>Studio Vivencia</strong> para ver el catálogo:</p>
-            <input type="password" id="passInput" placeholder="Contraseña..." onkeypress="checkEnter(event)">
-            <button onclick="validarPassword()">ENTRAR AL CATÁLOGO</button>
+            
+            <div class="password-container">
+                <input type="password" id="passInput" placeholder="Contraseña..." onkeypress="checkEnter(event)">
+                <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
+            </div>
+
+            <button class="btn-entrar" onclick="validarPassword()">ENTRAR AL CATÁLOGO</button>
             <div id="error-msg">⚠️ Contraseña incorrecta</div>
         </div>
     </div>
@@ -374,12 +406,27 @@
 
     <script>
         // --- CONFIGURACIÓN DE CONTRASEÑA ---
-        const CLAVE_CORRECTA = "vivencia2026"; // 🔑 Cambia esta contraseña por la que gustes
-        const REQUERIR_PASSWORD = true; // 🔴 Cambia a false cuando quieras QUITAR el bloqueo completamente
+        const CLAVE_CORRECTA = "1234"; 
+        const REQUERIR_PASSWORD = true; 
 
-        // Verificar bloqueo inicial
-        if (!REQUERIR_PASSWORD) {
-            document.getElementById("login-overlay").style.display = "none";
+        let pageFlip = null;
+        let libroInicializado = false;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            if (!REQUERIR_PASSWORD) {
+                document.getElementById("login-overlay").style.display = "none";
+                iniciarLibro();
+            }
+        });
+
+        // Función para mostrar / ocultar contraseña con el ojito
+        function togglePassword() {
+            const passInput = document.getElementById("passInput");
+            if (passInput.type === "password") {
+                passInput.type = "text";
+            } else {
+                passInput.type = "password";
+            }
         }
 
         function validarPassword() {
@@ -388,6 +435,11 @@
 
             if (passInput === CLAVE_CORRECTA) {
                 document.getElementById("login-overlay").style.display = "none";
+                if (!libroInicializado) {
+                    setTimeout(() => {
+                        iniciarLibro();
+                    }, 100);
+                }
             } else {
                 errorMsg.style.display = "block";
                 document.getElementById("passInput").value = "";
@@ -400,9 +452,12 @@
             }
         }
 
-        // --- INICIALIZACIÓN DEL LIBRO PAGEFLIP ---
-        window.addEventListener('DOMContentLoaded', () => {
-            const pageFlip = new St.PageFlip(document.getElementById("book"), {
+        // --- INICIALIZACIÓN DEL LIBRO TRAS ACCESO ---
+        function iniciarLibro() {
+            if (libroInicializado) return;
+            libroInicializado = true;
+
+            pageFlip = new St.PageFlip(document.getElementById("book"), {
                 width: 550,
                 height: 750,
                 size: "stretch",
@@ -421,10 +476,8 @@
             function updateUI(pageIndex) {
                 const realPageNum = pageIndex + 1;
                 
-                // Actualizar texto del número de página
                 document.getElementById("page-indicator").innerText = `Página ${realPageNum} de ${totalPages}`;
 
-                // Configurar enlace y mensaje de WhatsApp
                 const phoneNumber = "525514998843";
                 let message = "";
 
@@ -440,14 +493,12 @@
                 const waBtn = document.getElementById("whatsapp-btn");
                 waBtn.href = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
-                // Mostrar botón de WhatsApp desde la página 3 hasta la 42
                 if (pageIndex >= 2 && realPageNum < totalPages) {
                     waBtn.style.display = "flex";
                 } else {
                     waBtn.style.display = "none";
                 }
 
-                // Controlar el botón de reinicio en la página final
                 const restartBtn = document.getElementById("restart-btn");
                 if (realPageNum === totalPages) {
                     restartBtn.style.display = "inline-block";
@@ -456,15 +507,12 @@
                 }
             }
 
-            // Inicializar en la página 1
             updateUI(0);
 
-            // Escuchar cambios de página
             pageFlip.on('flip', (e) => {
                 updateUI(e.data);
             });
 
-            // Control de flechas laterales
             document.getElementById("prev-btn").addEventListener("click", () => {
                 pageFlip.flipPrev();
             });
@@ -473,11 +521,10 @@
                 pageFlip.flipNext();
             });
 
-            // Botón para volver al inicio
             document.getElementById("restart-btn").addEventListener("click", () => {
                 pageFlip.turnToPage(0);
             });
-        });
+        }
     </script>
 </body>
 </html>
