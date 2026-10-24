@@ -330,7 +330,7 @@
 
     <div id="hint">📖 Desliza o usa las flechas para hojear las muestras</div>
 
-    <!-- Contenedor del Libro con tus nombres reales de imagen -->
+    <!-- Contenedor del Libro -->
     <div id="book-container">
         <button id="prev-btn" class="nav-btn">❮</button>
         <div id="book">
@@ -478,10 +478,13 @@
         }
 
         function validarPassword() {
-            const passInput = document.getElementById("passInput").value;
+            const passInput = document.getElementById("passInput");
             const errorMsg = document.getElementById("error-msg");
+            
+            // Limpiamos espacios accidentales al inicio o final de lo que escriba el usuario
+            const valorIngresado = passInput.value.trim();
 
-            if (passInput === CLAVE_CORRECTA) {
+            if (valorIngresado === CLAVE_CORRECTA) {
                 document.getElementById("login-overlay").style.display = "none";
                 
                 setTimeout(() => {
@@ -492,7 +495,7 @@
                 }, 150);
             } else {
                 errorMsg.style.display = "block";
-                document.getElementById("passInput").value = "";
+                passInput.value = "";
             }
         }
 
