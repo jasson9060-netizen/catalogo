@@ -12,7 +12,6 @@
             padding: 0 !important;
             width: 100% !important;
             height: 100% !important;
-            /* Fondo de Estudio Fotográfico Iluminado */
             background: radial-gradient(circle at center, #3a3d40 0%, #181a1b 70%, #0d0e0f 100%) !important;
             display: flex;
             flex-direction: column;
@@ -68,7 +67,6 @@
             margin-bottom: 15px;
         }
 
-        /* Contenedor del input con el ojito dentro */
         .password-container {
             position: relative;
             width: 100%;
@@ -77,7 +75,7 @@
 
         .login-box input {
             width: 100%;
-            padding: 10px 40px 10px 10px; /* Espacio a la derecha para el botón del ojito */
+            padding: 10px 40px 10px 10px;
             border-radius: 6px;
             border: 1px solid #475569;
             background: #0f172a;
@@ -92,7 +90,6 @@
             border-color: #38bdf8;
         }
 
-        /* Estilo del botón del ojito */
         .toggle-password {
             position: absolute;
             right: 10px;
@@ -226,7 +223,6 @@
             pointer-events: none;
         }
 
-        /* Capa transparente anti-guardado de imágenes */
         .page::after {
             content: "";
             position: absolute;
@@ -237,7 +233,6 @@
             z-index: 10;
         }
 
-        /* Botones de navegación laterales estilo cristal flotante */
         .nav-btn {
             position: absolute;
             top: 50%;
@@ -264,7 +259,6 @@
         #prev-btn { left: 10px; }
         #next-btn { right: 10px; }
 
-        /* Botón Flotante de WhatsApp */
         #whatsapp-btn {
             position: fixed;
             bottom: 20px;
@@ -289,7 +283,6 @@
             transform: scale(1.05);
         }
 
-        /* Botón de Reinicio en Última Página */
         #restart-btn {
             position: fixed;
             bottom: 20px;
@@ -410,53 +403,9 @@
         const REQUERIR_PASSWORD = true; 
 
         let pageFlip = null;
-        let libroInicializado = false;
 
         window.addEventListener('DOMContentLoaded', () => {
-            if (!REQUERIR_PASSWORD) {
-                document.getElementById("login-overlay").style.display = "none";
-                iniciarLibro();
-            }
-        });
-
-        // Función para mostrar / ocultar contraseña con el ojito
-        function togglePassword() {
-            const passInput = document.getElementById("passInput");
-            if (passInput.type === "password") {
-                passInput.type = "text";
-            } else {
-                passInput.type = "password";
-            }
-        }
-
-        function validarPassword() {
-            const passInput = document.getElementById("passInput").value;
-            const errorMsg = document.getElementById("error-msg");
-
-            if (passInput === CLAVE_CORRECTA) {
-                document.getElementById("login-overlay").style.display = "none";
-                if (!libroInicializado) {
-                    setTimeout(() => {
-                        iniciarLibro();
-                    }, 100);
-                }
-            } else {
-                errorMsg.style.display = "block";
-                document.getElementById("passInput").value = "";
-            }
-        }
-
-        function checkEnter(e) {
-            if (e.key === 'Enter') {
-                validarPassword();
-            }
-        }
-
-        // --- INICIALIZACIÓN DEL LIBRO TRAS ACCESO ---
-        function iniciarLibro() {
-            if (libroInicializado) return;
-            libroInicializado = true;
-
+            // Inicializamos el libro en segundo plano
             pageFlip = new St.PageFlip(document.getElementById("book"), {
                 width: 550,
                 height: 750,
@@ -475,7 +424,6 @@
 
             function updateUI(pageIndex) {
                 const realPageNum = pageIndex + 1;
-                
                 document.getElementById("page-indicator").innerText = `Página ${realPageNum} de ${totalPages}`;
 
                 const phoneNumber = "525514998843";
@@ -524,6 +472,46 @@
             document.getElementById("restart-btn").addEventListener("click", () => {
                 pageFlip.turnToPage(0);
             });
+
+            if (!REQUERIR_PASSWORD) {
+                document.getElementById("login-overlay").style.display = "none";
+                pageFlip.update();
+            }
+        });
+
+        function togglePassword() {
+            const passInput = document.getElementById("passInput");
+            if (passInput.type === "password") {
+                passInput.type = "text";
+            } else {
+                passInput.type = "password";
+            }
+        }
+
+        function validarPassword() {
+            const passInput = document.getElementById("passInput").value;
+            const errorMsg = document.getElementById("error-msg");
+
+            if (passInput === CLAVE_CORRECTA) {
+                document.getElementById("login-overlay").style.display = "none";
+                
+                // Forzado de redibujado inmediato para mostrar las páginas al quitar el bloqueo
+                setTimeout(() => {
+                    if (pageFlip) {
+                        pageFlip.update();
+                        window.dispatchEvent(new Event('resize'));
+                    }
+                }, 150);
+            } else {
+                errorMsg.style.display = "block";
+                document.getElementById("passInput").value = "";
+            }
+        }
+
+        function checkEnter(e) {
+            if (e.key === 'Enter') {
+                validarPassword();
+            }
         }
     </script>
 </body>
