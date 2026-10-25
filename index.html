@@ -1,16 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
-    <!-- Vista previa para WhatsApp y Redes Sociales -->
-<meta property="og:type" content="website">
-<meta property="og:title" content="Studio Vivencia">
-<meta property="og:description" content="Catálogo y Muestrario Digital de Credenciales y Graduaciones">
-<meta property="og:image" content="https://catalogo.studiovivencia.com/logo.png">
-<meta property="og:image:type" content="image/png">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo Digital - Studio Vivencia</title>
+
+    <!-- Favicon para la pestaña del navegador -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+
+    <!-- Vista previa para WhatsApp y Redes Sociales -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Studio Vivencia">
+    <meta property="og:description" content="Catálogo y Muestrario Digital de Credenciales y Graduaciones">
+    <meta property="og:image" content="https://catalogo.studiovivencia.com/logo.png">
+    <meta property="og:image:type" content="image/png">
+    <meta property="og:image:width" content="512">
+    <meta property="og:image:height" content="512">
+
     <!-- Librería PageFlip para el efecto de libro -->
     <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.js"></script>
     <style>
@@ -435,7 +442,6 @@
                 const phoneNumber = "525514998843";
                 let message = "";
 
-                // Mensajes personalizados según la página exacta
                 if (realPageNum === 3) {
                     message = `Me interesa la credencial con QR y notificación.`;
                 } else if (realPageNum === 42) {
@@ -448,14 +454,12 @@
                 const waBtn = document.getElementById("whatsapp-btn");
                 waBtn.href = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
 
-                // Mostrar botón de WhatsApp de la página 3 a la 42 (Oculto en portadas 1-2 y en la última página 43)
                 if (pageIndex >= 2 && realPageNum < totalPages) {
                     waBtn.style.display = "flex";
                 } else {
                     waBtn.style.display = "none";
                 }
 
-                // Mostrar botón exclusivo de reinicio en la página final (43)
                 const restartBtn = document.getElementById("restart-btn");
                 if (realPageNum === totalPages) {
                     restartBtn.style.display = "inline-block";
@@ -499,7 +503,7 @@
 
         function validarPassword() {
             const passInput = document.getElementById("passInput");
-            const errorMsg = document.getElementById("error-msg");
+            errorMsg = document.getElementById("error-msg");
             const valorIngresado = passInput.value.trim();
 
             if (valorIngresado === CLAVE_CORRECTA) {
@@ -512,7 +516,7 @@
                     }
                 }, 150);
             } else {
-                errorMsg.style.display = "block";
+                document.getElementById("error-msg").style.display = "block";
                 passInput.value = "";
             }
         }
