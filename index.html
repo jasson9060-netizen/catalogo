@@ -11,8 +11,8 @@
 
     <!-- Vista previa para WhatsApp y Redes Sociales -->
     <meta property="og:type" content="website">
-    <meta property="og:title" content="Catálogo">
-    <meta property="og:description" content="Muestrario Digital de Credenciales ">
+    <meta property="og:title" content="Catálogo Digital - Studio Vivencia">
+    <meta property="og:description" content="Estudio fotográfico y servicios de credenciales y graduaciones.">
     <meta property="og:image" content="https://catalogo.studiovivencia.com/logo.png">
     <meta property="og:image:type" content="image/png">
     <meta property="og:image:width" content="512">
@@ -41,25 +41,49 @@
             padding-bottom: 4px !important;
         }
 
-        /* --- PANTALLA DE CONTRASEÑA --- */
+        /* --- PANTALLA DE PRESENTACIÓN PÚBLICA / BLOQUEO DE LIBRO --- */
         #login-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100vw;
             height: 100vh;
-            background: rgba(13, 14, 15, 0.96);
-            backdrop-filter: blur(10px);
+            background: rgba(13, 14, 15, 0.88);
+            backdrop-filter: blur(8px);
             z-index: 10000;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+
+        .public-welcome {
+            text-align: center;
+            color: #fff;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+
+        .public-welcome h1 {
+            color: #38bdf8;
+            font-size: 24px;
+            margin: 10px 0;
+        }
+
+        .public-welcome p {
+            font-size: 14px;
+            color: #cbd5e1;
+            line-height: 1.5;
+            margin: 0 0 15px 0;
         }
 
         .login-box {
             background: #1e293b;
             border: 1px solid #38bdf8;
-            padding: 25px 30px;
+            padding: 20px 25px;
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 10px 30px rgba(0,0,0,0.8);
@@ -71,14 +95,8 @@
         .login-box h3 {
             margin-top: 0;
             color: #38bdf8;
-            font-size: 18px;
+            font-size: 16px;
             letter-spacing: 0.5px;
-        }
-
-        .login-box p {
-            font-size: 13px;
-            color: #cbd5e1;
-            margin-bottom: 15px;
         }
 
         .password-container {
@@ -178,7 +196,7 @@
             margin: 0;
         }
 
-        /* Indicador de página actual arriba para no estorbar con WhatsApp */
+        /* Indicador de página actual */
         #page-indicator {
             color: #fff;
             font-size: 12px;
@@ -237,16 +255,6 @@
             height: 100%;
             object-fit: contain;
             pointer-events: none;
-        }
-
-        .page::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
         }
 
         .nav-btn {
@@ -324,11 +332,15 @@
 </head>
 <body>
 
-    <!-- OVERLAY DE CONTRASEÑA -->
+    <!-- OVERLAY DE CONTRASEÑA (Protege el muestrario interno pero deja ver la presentación pública) -->
     <div id="login-overlay">
+        <div class="public-welcome">
+            <h1>Studio Vivencia</h1>
+            <p>Estudio de fotografía profesional. Especialistas en paquetes de graduación escolar, credenciales PVC, eventos y marcos personalizados.</p>
+        </div>
         <div class="login-box">
-            <h3>🔒 Acceso Privado</h3>
-            <p>Ingresa la contraseña proporcionada por <strong>Studio Vivencia</strong> para ver el catálogo de Credenciales:</p>
+            <h3>🔒 Acceso al Muestrario</h3>
+            <p style="font-size: 12px; color: #cbd5e1; margin-bottom: 12px;">Ingresa la contraseña para ver los modelos de credenciales:</p>
             
             <div class="password-container">
                 <input type="password" id="passInput" placeholder="Contraseña..." onkeypress="checkEnter(event)">
@@ -503,7 +515,7 @@
 
         function validarPassword() {
             const passInput = document.getElementById("passInput");
-            errorMsg = document.getElementById("error-msg");
+            const errorMsg = document.getElementById("error-msg");
             const valorIngresado = passInput.value.trim();
 
             if (valorIngresado === CLAVE_CORRECTA) {
@@ -516,7 +528,7 @@
                     }
                 }, 150);
             } else {
-                document.getElementById("error-msg").style.display = "block";
+                errorMsg.style.display = "block";
                 passInput.value = "";
             }
         }
